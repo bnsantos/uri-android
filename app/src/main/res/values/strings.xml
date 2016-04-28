@@ -2,15 +2,16 @@
   <string name="app_name">UriExample</string>
 
   <string name="filename">Filename: %s</string>
+  <string name="size">Size: %s</string>
   <string name="path">Path: %s</string>
   <string name="mime_type">MimeType: %s</string>
   <string name="authority">Authority: %s</string>
   <string name="scheme">Scheme: %s</string>
   <string name="uri_path">UriPath: %s</string>
   <string name="user_info">User Info: %s</string>
-  <string name="absolute">Absolute: %s</string>
-  <string name="hierarchical">Hierarchical: %s</string>
-  <string name="opaque">Opaque: %s</string>
-  <string name="relative">Relative: %s</string>
+  <string name="absolute">Absolute: %b</string>
+  <string name="hierarchical">Hierarchical: %b</string>
+  <string name="opaque">Opaque: %b</string>
+  <string name="relative">Relative: %b</string>
   <string name="pick_file">Pick file</string>
 </resources>

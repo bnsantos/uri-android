@@ -27,10 +27,18 @@
         android:text="@string/filename"/>
 
       <TextView
-        android:id="@+id/path"
+        android:id="@+id/size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/filename"
+        android:layout_marginTop="10dp"
+        android:text="@string/size"/>
+
+      <TextView
+        android:id="@+id/path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/size"
         android:layout_marginTop="10dp"
         android:text="@string/path"/>
 
