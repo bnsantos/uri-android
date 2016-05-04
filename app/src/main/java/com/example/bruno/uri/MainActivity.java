@@ -12,10 +12,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.bruno.uri.databinding.ActivityMainBinding;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
   private static final int PICK_FILE_REQ = 123;
   private ActivityMainBinding binding;
+  private CopyAsyncTask task;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +54,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ContentResolver cr = getContentResolver();
 
         binding.image.setImageURI(uri);
+        int width = 500, height = 500;
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+            .setResizeOptions(new ResizeOptions(width, height))
+            .build();
+        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+            .setOldController(binding.image.getController())
+            .setImageRequest(request)
+            .build();
+        binding.image.setController(controller);
+
         setNameAndSize(cr, uri);
-        binding.path.setText(getString(R.string.path, uri.getPath()));
+        String path = UriUtils.getPath(this, uri);
+        if(path == null){
+          task = new CopyAsyncTask(this, "jpg");
+          Toast.makeText(this, "Creating a copy of the file", Toast.LENGTH_SHORT).show();
+          task.execute(uri);
+        }
+        binding.path.setText(getString(R.string.path, path));
         binding.mimeType.setText(getString(R.string.mime_type, cr.getType(uri)));
         binding.authority.setText(getString(R.string.authority, uri.getAuthority()));
         binding.scheme.setText(getString(R.string.authority, uri.getScheme()));

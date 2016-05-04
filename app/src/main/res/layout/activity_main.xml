@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto">
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +17,9 @@
         android:id="@+id/image"
         android:layout_width="180dp"
         android:layout_height="180dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        fresco:failureImage="@android:color/holo_red_dark"
+        fresco:placeholderImageScaleType="fitCenter"/>
 
       <TextView
         android:id="@+id/filename"
