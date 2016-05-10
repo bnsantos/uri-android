@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
@@ -33,8 +34,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   @Override
   public void onClick(View view) {
+    /*new MaterialFilePicker()
+        .withActivity(this)
+        .withFilter(Pattern.compile(".*\\.jpg$"))
+        .withFilterDirectories(false)
+        .withHiddenFiles(false)
+        .withRequestCode(123)
+        .start();*/
     Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT);
     pickPhoto.setType("image/*");
+    pickPhoto.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+    pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
     startActivityForResult(pickPhoto, PICK_FILE_REQ );
   }
 
@@ -42,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if(requestCode == PICK_FILE_REQ && resultCode == RESULT_OK){
+      grantUriPermissionLonger(data);
       handleResult(data);
+    }else if(requestCode == PICK_FILE_REQ && resultCode == 123){
+      Toast.makeText(MainActivity.this, "TODO", Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -105,6 +118,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       binding.size.setText(getString(R.string.size, Long.toString(returnCursor.getLong(sizeIndex))));
     }else {
       Toast.makeText(MainActivity.this, "Cursor null", Toast.LENGTH_SHORT).show();
+    }
+  }
+
+  private void grantUriPermissionLonger(Intent intent){
+    final int takeFlags = (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      if(intent.getData()!=null) {
+        getContentResolver().takePersistableUriPermission(intent.getData(), takeFlags);
+      }else if(intent.getClipData()!=null&&intent.getClipData().getItemCount()>0){
+        for (int i = 0; i < intent.getClipData().getItemCount(); i++) {
+          getContentResolver().takePersistableUriPermission(intent.getClipData().getItemAt(i).getUri(), takeFlags);
+        }
+      }
     }
   }
 }
